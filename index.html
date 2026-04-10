@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Estate | Магазин недвижимости</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e293b;
+            --accent: #c29a5b;
+            --bg: #f8fafc;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #cbd5e1; /* Фон вокруг ленты */
+            display: flex;
+            justify-content: center;
+            color: var(--primary);
+        }
+
+        .site-wrapper {
+            width: 100%;
+            max-width: 1200px;
+            background: var(--bg);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.2);
+            margin: 40px 0;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        /* Анимация при скролле */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Шапка */
+        header {
+            height: 60vh;
+            background: linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0.2)), 
+                        url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1500&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            padding: 0 60px;
+            color: white;
+        }
+
+        .header-content h1 { font-size: 4rem; font-weight: 800; line-height: 1; margin-bottom: 20px; }
+        .header-content p { font-size: 1.2rem; color: #cbd5e1; max-width: 500px; }
+
+        /* Сетка домов */
+        .catalog-container { padding: 80px 40px; }
+        .section-title { margin-bottom: 50px; font-size: 2rem; border-left: 5px solid var(--accent); padding-left: 20px; }
+
+        .houses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .house-card {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: 0.4s;
+            position: relative;
+        }
+
+        .house-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+
+        .house-card img { width: 100%; height: 220px; object-fit: cover; }
+        
+        .badge {
+            position: absolute; top: 15px; right: 15px;
+            background: var(--accent); color: white;
+            padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;
+        }
+
+        .house-info { padding: 25px; }
+        .house-info h3 { font-size: 1.3rem; margin-bottom: 10px; }
+        .house-info p { font-size: 0.9rem; color: #64748b; margin-bottom: 20px; }
+
+        .specs { display: flex; gap: 15px; margin-bottom: 20px; font-size: 0.85rem; color: #94a3b8; }
+
+        .price { font-size: 1.6rem; font-weight: 800; color: var(--primary); margin-bottom: 15px; }
+
+        .btn-buy {
+            display: block; width: 100%; padding: 15px;
+            background: var(--primary); color: white;
+            text-align: center; text-decoration: none;
+            border-radius: 10px; font-weight: bold; transition: 0.3s;
+        }
+
+        .btn-buy:hover { background: var(--accent); }
+
+        footer { background: var(--primary); color: #94a3b8; padding: 60px 40px; text-align: center; }
+
+        @media (max-width: 768px) {
+            header { padding: 20px; text-align: center; }
+            .header-content h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="site-wrapper">
+        <header>
+            <div class="header-content reveal active">
+                <h1>Найди свой <br> идеальный дом</h1>
+                <p>Эксклюзивная коллекция из 20 лучших объектов недвижимости для вашей комфортной жизни.</p>
+            </div>
+        </header>
+
+        <section class="catalog-container">
+            <h2 class="section-title">Каталог домов</h2>
+            <div class="houses-grid" id="catalog">
+                </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2026 Elite Estate Global. Все объекты сертифицированы.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Данные для 20 домов
+        const houses = [
+            { title: "Villa Modern", price: "$850,000", area: "250м²", img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=500&q=60" },
+            { title: "Forest Retreat", price: "$420,000", area: "180м²", img: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=500&q=60" },
+            { title: "Sky Glass House", price: "$1,200,000", area: "400м²", img: "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?auto=format&fit=crop&w=500&q=60" },
+            { title: "Classic Manor", price: "$980,000", area: "320м²", img: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=500&q=60" },
+            { title: "Cottage Cozy", price: "$250,000", area: "120м²", img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=500&q=60" },
+            { title: "Mountain Peak", price: "$560,000", area: "210м²", img: "https://images.unsplash.com/photo-1513584684374-8bdb7489feef?auto=format&fit=crop&w=500&q=60" },
+            { title: "Eco Smart Home", price: "$740,000", area: "230м²", img: "https://images.unsplash.com/photo-1523217582562-09d0def993a6?auto=format&fit=crop&w=500&q=60" },
+            { title: "River Side", price: "$390,000", area: "155м²", img: "https://images.unsplash.com/photo-1500315331616-db4f707c24d1?auto=format&fit=crop&w=500&q=60" },
+            { title: "Gold Hill Villa", price: "$2,100,000", area: "550м²", img: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=500&q=60" },
+            { title: "Minimalist Loft", price: "$310,000", area: "140м²", img: "https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=500&q=60" },
+            { title: "Family Nest", price: "$480,000", area: "200м²", img: "https://images.unsplash.com/photo-1560184897-ae75f418493e?auto=format&fit=crop&w=500&q=60" },
+            { title: "Ocean Breeze", price: "$1,550,000", area: "380м²", img: "https://images.unsplash.com/photo-1512915922686-57c11dde9b6b?auto=format&fit=crop&w=500&q=60" },
+            { title: "Desert Mirage", price: "$670,000", area: "240м²", img: "https://images.unsplash.com/photo-1475855581690-80accde3ae2b?auto=format&fit=crop&w=500&q=60" },
+            { title: "Stone Wood Mansion", price: "$820,000", area: "290м²", img: "https://images.unsplash.com/photo-1449156001437-3a1621acda24?auto=format&fit=crop&w=500&q=60" },
+            { title: "Lakeside View", price: "$510,000", area: "190м²", img: "https://images.unsplash.com/photo-1505843513577-22bb7d21ef45?auto=format&fit=crop&w=500&q=60" },
+            { title: "Neon Future Home", price: "$1,100,000", area: "310м²", img: "https://images.unsplash.com/photo-1515263487990-61b07816b324?auto=format&fit=crop&w=500&q=60" },
+            { title: "Tropic Paradise", price: "$930,000", area: "275м²", img: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=500&q=60" },
+            { title: "Brick Heritage", price: "$340,000", area: "165м²", img: "https://images.unsplash.com/photo-1572120339559-d68fd9095027?auto=format&fit=crop&w=500&q=60" },
+            { title: "Arctic Lodge", price: "$590,000", area: "220м²", img: "https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=500&q=60" },
+            { title: "Zen Garden Villa", price: "$875,000", area: "265м²", img: "https://images.unsplash.com/photo-1513584684374-8bdb7489feef?auto=format&fit=crop&w=500&q=60" }
+        ];
+
+        // Генерация карточек
+        const catalog = document.getElementById('catalog');
+        houses.forEach(house => {
+            const card = document.createElement('div');
+            card.className = 'house-card reveal';
+            card.innerHTML = `
+                <div class="badge">В наличии</div>
+                <img src="${house.img}" alt="${house.title}">
+                <div class="house-info">
+                    <h3>${house.title}</h3>
+                    <div class="specs">
+                        <span>🛏 4 Спальни</span>
+                        <span>🛀 2 Ванных</span>
+                        <span>📐 ${house.area}</span>
+                    </div>
+                    <div class="price">${house.price}</div>
+                    <a href="#" class="btn-buy">Купить сейчас</a>
+                </div>
+            `;
+            catalog.appendChild(card);
+        });
+
+        // Функция анимации при скролле
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                if (elementTop < windowHeight - 100) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        reveal();
+    </script>
+</body>
+</html>
